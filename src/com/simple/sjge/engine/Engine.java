@@ -11,11 +11,11 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics2D;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 
 import com.simple.sjge.gfx.Colour;
 import com.simple.sjge.gui.Gui;
+import com.simple.sjge.gui.TestGui;
 import com.simple.sjge.util.Debug;
 
 public class Engine extends Canvas implements Runnable {
@@ -31,10 +31,12 @@ public class Engine extends Canvas implements Runnable {
 	private static final double TICKS_PER_SECOND = 60.0;
 
 	private static Engine engine;
+	private static Graphics2D g;
 	private KeyboardHandler input;
+	
 	static boolean GAME_RUNNING = false;
 
-	private Gui currentGui = null;
+	Gui currentGui = null;
 
 	public static boolean DEBUG_ENABLED = false;
 
@@ -86,6 +88,7 @@ public class Engine extends Canvas implements Runnable {
 
 	public void init() {
 		input = new KeyboardHandler(this);
+		setGui(new TestGui());
 	}
 
 	public void run() {
@@ -141,8 +144,8 @@ public class Engine extends Canvas implements Runnable {
 			return;
 		}
 
-		Graphics2D g = (Graphics2D)bs.getDrawGraphics();
-		g.setColor(Colour.BLACK);
+		g = (Graphics2D)bs.getDrawGraphics();
+		g.setColor(Colour.WHITE);
 		g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
 		// Game rendering
@@ -154,9 +157,25 @@ public class Engine extends Canvas implements Runnable {
 		bs.show();
 
 	}
-
+	
+	public static Engine getInstance() {
+		return engine;
+	}
+	
+	public static Graphics2D getGraphicsInstance() {
+		return g;
+	}
+	
 	public void setGui(Gui gui) {
 		this.currentGui = gui;
+	}
+	
+	public int getWidth() {
+		return GAME_WIDTH;
+	}
+	
+	public int getHeight() {
+		return GAME_HEIGHT;
 	}
 
 }

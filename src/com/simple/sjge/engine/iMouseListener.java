@@ -2,6 +2,10 @@ package com.simple.sjge.engine;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+import com.simple.sjge.gui.Gui;
+import com.simple.sjge.gui.controls.GuiButton;
 
 public class iMouseListener implements MouseListener {
 	
@@ -12,9 +16,18 @@ public class iMouseListener implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		
-
+	public void mouseClicked(MouseEvent e) {
+		int i = e.getX();
+		int j = e.getY();
+		Gui gui = engine.currentGui;
+		if (gui != null) { 
+			ArrayList controls = gui.controls;
+			for (int l = 0; l < controls.size(); l++) {
+				GuiButton button = (GuiButton)controls.get(l);
+				if (button.mousePressed(i, j))
+					gui.actionPerformed(button);
+			}
+		}
 	}
 
 	@Override
