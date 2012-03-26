@@ -15,7 +15,6 @@ public class GuiButton extends Gui {
 	public int x, y, w, h, id;
 	public boolean enabled = true;
 	public boolean isMouseOver = false;
-	private boolean beenPressed = false;
 
 	public GuiButton(int id, int x, int y, String text) {
 		this(id, x, y, 200, 30, text);
@@ -48,7 +47,6 @@ public class GuiButton extends Gui {
 	}
 
 	public boolean mousePressed(int x, int y) {
-		beenPressed = true;
 		return enabled && x > this.x && x < (this.x + this.w) && y < (this.y + this.h) && y > this.y;
 	}
 

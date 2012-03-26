@@ -9,6 +9,7 @@ package com.simple.sjge.engine;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -33,6 +34,8 @@ public class Engine extends Canvas implements Runnable {
 	private static Engine engine;
 	private static Graphics2D g;
 	private KeyboardHandler input;
+	
+	private int lastTicks, lastFrames;
 	
 	static boolean GAME_RUNNING = false;
 
@@ -121,6 +124,8 @@ public class Engine extends Canvas implements Runnable {
 			frames++;
 			if (System.currentTimeMillis() - lastTick > 1000L) {
 				System.out.println(frames+" fps, "+ticks+" ticks");
+				lastFrames = frames;
+				lastTicks = ticks;
 				frames = ticks = 0;
 				lastTick = System.currentTimeMillis();
 			}
@@ -145,10 +150,12 @@ public class Engine extends Canvas implements Runnable {
 		}
 
 		g = (Graphics2D)bs.getDrawGraphics();
-		g.setColor(Colour.WHITE);
+		g.setColor(Colour.BLACK);
 		g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
 		// Game rendering
+		
+		drawDebug(g);
 
 		if (currentGui != null)
 			currentGui.render();
@@ -156,6 +163,15 @@ public class Engine extends Canvas implements Runnable {
 		g.dispose();
 		bs.show();
 
+	}
+	
+	public void drawDebug(Graphics2D g) { // [Roxy] Draws debug output to the game screen
+		FontMetrics fm = g.getFontMetrics(); // [Roxy] Get the FontMetrics object.
+		String fps = lastFrames+" fps, "+lastTicks+" ticks"; // [Roxy] The String for the fps output.
+		int a = fm.stringWidth(fps); // [Roxy] and int containing the width of the fps string.
+		int b = GAME_WIDTH - (a + 2); // [Roxy] The x position of where the text should be drawn.
+		g.setColor(Colour.WHITE); // [Roxy] Sets the debug text to always be white.
+		g.drawString(fps, b, 12); // [Roxy] Draw the string on the screen (string, x ,y + 10).
 	}
 	
 	public static Engine getInstance() {

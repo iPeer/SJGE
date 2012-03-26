@@ -17,6 +17,12 @@ public class TestGui extends Gui {
 			Debug.p("IT WORK'D!");
 	}
 	
+	public void actionPerformedRight(GuiButton b) { // [Roxy] Handles right clicks for this GUI.
+		if (b.id == 0) {
+			Debug.p("RIGHT CLICK WORKS!");
+		}
+	}
+	
 	public void render() {
 		renderBackground();
 		drawStringWithShadow(title, 20);

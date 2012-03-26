@@ -68,5 +68,9 @@ public class Gui {
 	public void actionPerformed(GuiButton button) {
 		
 	}
+
+	public void actionPerformedRight(GuiButton button) {
+
+	}
 	
 }
