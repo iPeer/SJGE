@@ -33,15 +33,15 @@ public class Engine extends Canvas implements Runnable {
 	private static Engine engine;
 	private KeyboardHandler input;
 	static boolean GAME_RUNNING = false;
-	
+
 	private Gui currentGui = null;
-	
+
 	public static boolean DEBUG_ENABLED = false;
 
 	public Engine() {
 		// Class init
 	}
-	
+
 	public static void main(String[] args) {
 		if (args.length > 0)
 			for (String line : args)
@@ -63,10 +63,11 @@ public class Engine extends Canvas implements Runnable {
 		frame.pack();
 		frame.setResizable(false);
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 		engine.requestFocus();
 		engine.start();
 	}
-	
+
 	public void start() {
 		try {
 			new Thread(this).start();
@@ -77,16 +78,16 @@ public class Engine extends Canvas implements Runnable {
 			System.exit(0);
 		}
 	}
-	
+
 	public void stop() {
 		GAME_RUNNING = false;
 		engine.stop();
 	}
-	
+
 	public void init() {
 		input = new KeyboardHandler(this);
 	}
-	
+
 	public void run() {
 		int ticks = 0;
 		int frames = 0;
@@ -99,8 +100,7 @@ public class Engine extends Canvas implements Runnable {
 			long now = System.nanoTime();
 			processQueue += (double)(now - lastTime) / ticksPerLoop;
 			lastTime = now;
-			boolean shouldRender;
-			for (shouldRender = true; processQueue >= 1.0; shouldRender = true) { // Tick
+			if (processQueue >= 1.0) { // Tick
 				ticks++;
 				tick();
 				processQueue--;
@@ -114,10 +114,8 @@ public class Engine extends Canvas implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			if (shouldRender) {
-				render();
-				frames++;
-			}
+			render();
+			frames++;
 			if (System.currentTimeMillis() - lastTick > 1000L) {
 				System.out.println(frames+" fps, "+ticks+" ticks");
 				frames = ticks = 0;
@@ -125,16 +123,16 @@ public class Engine extends Canvas implements Runnable {
 			}
 		}
 	}
-	
+
 	public void tick() {
-		
+
 		input.tick();
-		
+
 		if (currentGui != null)
 			currentGui.tick();
-		
+
 	}
-	
+
 	public void render() { 
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
@@ -142,23 +140,23 @@ public class Engine extends Canvas implements Runnable {
 			requestFocus();
 			return;
 		}
-		
+
 		Graphics2D g = (Graphics2D)bs.getDrawGraphics();
 		g.setColor(Colour.BLACK);
 		g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-		
+
 		// Game rendering
-		
+
 		if (currentGui != null)
 			currentGui.render();
-		
+
 		g.dispose();
 		bs.show();
-		
+
 	}
-	
+
 	public void setGui(Gui gui) {
 		this.currentGui = gui;
 	}
-	
+
 }
