@@ -26,7 +26,7 @@ public class iMouseListener implements MouseListener {
 				GuiButton button = (GuiButton)controls.get(l);
 				if (button.mousePressed(i, j))
 					if (e.getButton() == 3)
-						gui.actionPerformedRight(button); // [Roxy] Enables the button to take right click input
+						button.actionPerformedRight(button); // [Roxy] Enables the button to take right click input
 					else
 						button.actionPerformed(button);
 			}
